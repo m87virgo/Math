@@ -1,3 +1,5 @@
+package de.m87virgo.math.rk4;
+
 /**
  * Classic 4th-order Runge–Kutta for scalar ODEs.
  */
