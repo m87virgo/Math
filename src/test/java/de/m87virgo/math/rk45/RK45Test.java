@@ -38,13 +38,13 @@ public class RK45Test {
   @Test
   public void testParabolaWithInflectionPoint() {
     DifferentialEquation eq = (t, y) -> t;
-    RK45 solver = new RK45(eq, 1e-8, 1e-8, 1e-8, 0.1);
+    RK45 solver = new RK45(eq, 1e-9, 1e-9, 1e-8, 0.1);
 
     double t0 = -2.0;
     double tEnd = 2.0;
-    double y0 = 0.0;
+    double y0 =0;
     double yEnd = solver.integrate(t0, y0, tEnd);
-    double exact = 0.5 * tEnd * tEnd;
+    double exact = 0.5 * (tEnd * tEnd - t0 * t0);
 
     assertEquals(exact, yEnd, 1e-6, "RK45 sollte Wendepunkt bei t=0 korrekt behandeln");
   }

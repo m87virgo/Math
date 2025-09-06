@@ -23,15 +23,16 @@ public class RK45 {
   public double integrate(double t0, double y0, double tEnd) {
     double t = t0;
     double y = y0;
-    double h = (tEnd - t0) / 10.0; // initial step size guess
+    //    double h = (tEnd - t0) / 10.0; // initial step size guess
+    double h = minStep; // (tEnd - t0) / 10.0 ist fuer mich sinnbefreit
 
-//    int cntIterations = 0;
+    int cntIterations = 0;
 
     while (t < tEnd) {
       if (t + h > tEnd) {
         h = tEnd - t; // last step adjustment
       }
-//      cntIterations++;
+      cntIterations++;
       // Runge-Kutta-Fehlberg coefficients
       double k1 = h * equation.f(t, y);
       double k2 = h * equation.f(t + h / 4.0, y + k1 / 4.0);
@@ -54,6 +55,7 @@ public class RK45 {
       // error estimate
       double err = Math.abs(y5 - y4);
       double tol = absTol + relTol * Math.max(Math.abs(y), Math.abs(y5));
+      System.out.println("i:"+ cntIterations+ ", t: " + t + ", y: " + y + ", h: " + h + ", err: " + err + ", tol: " + tol);
 
       if (err <= tol) {
         // accept step
@@ -69,7 +71,7 @@ public class RK45 {
       h *= factor;
       h = Math.max(minStep, Math.min(maxStep, h));
     }
-//    System.out.println("RK45 iterations: " + cntIterations);
+    System.out.println("RK45 iterations: " + cntIterations);
     return y;
   }
 }
