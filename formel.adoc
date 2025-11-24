@@ -1,0 +1,6 @@
+\[
+\frac{d x}{d t} = H_0 E(x)
+\]
+\[
+E(a) = \sqrt{\Omega_r a^{-4} + \Omega_m a^{-3} + \Omega_k a^{-2} + \Omega_\Lambda}
+\]

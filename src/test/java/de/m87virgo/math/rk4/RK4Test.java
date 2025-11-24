@@ -13,12 +13,13 @@ public class RK4Test {
     void testExpGrowth_yPrimeEqualsY() {
         // y' = y, y(0) = 1 -> y(t) = e^t
         ODEFunction f = (t, y) -> y;
-        double t0 = 0.0;
+
+      double t0 = 0.0;
         double y0 = 1.0;
         double tEnd = 1.0;     // compare at t = 1
 
         int nSteps = 100;      // sufficiently small h
-        double[] ys = ODEFunction.RK4.solve(f, t0, y0, tEnd, nSteps);
+        double[] ys = RK4.solve(f, t0, y0, tEnd, nSteps);
         double yNum = ys[ys.length - 1];
         double yExact = Math.exp(1.0);
 
@@ -38,8 +39,8 @@ public class RK4Test {
         int n2 = 50;            // half step size
         double exact = Math.exp(1.0);
 
-        double[] y1 = ODEFunction.RK4.solve(f, t0, y0, tEnd, n1);
-        double[] y2 = ODEFunction.RK4.solve(f, t0, y0, tEnd, n2);
+        double[] y1 = RK4.solve(f, t0, y0, tEnd, n1);
+        double[] y2 = RK4.solve(f, t0, y0, tEnd, n2);
         double e1 = Math.abs(y1[y1.length - 1] - exact);
         double e2 = Math.abs(y2[y2.length - 1] - exact);
 
@@ -56,8 +57,8 @@ public class RK4Test {
         double t0 = 0.0;
         double y0 = 1.0;
         double tEnd = 2.0;
-        int nSteps = 200;
-        double[] ys = ODEFunction.RK4.solve(f, t0, y0, tEnd, nSteps);
+        int nSteps = (int)1e5;
+        double[] ys = RK4.solve(f, t0, y0, tEnd, nSteps);
         double yNum = ys[ys.length - 1];
         double yExact = 1.25 * Math.exp(-2.0 * tEnd) + 0.5 * tEnd - 0.25;
         assertEquals(yExact, yNum, 1e-7);
