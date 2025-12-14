@@ -2,6 +2,7 @@ package de.m87virgo.math.rk4;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import de.m87virgo.math.CalcResult;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -18,14 +19,45 @@ public class RK4Test {
         double y0 = 1.0;
         double tEnd = 1.0;     // compare at t = 1
 
-        int nSteps = 100;      // sufficiently small h
+        int nSteps = 1_00000;      // sufficiently small h
+        long startTime = System.nanoTime();
         double[] ys = RK4.solve(f, t0, y0, tEnd, nSteps);
+        long endTime = System.nanoTime();
+        long durationNanos = endTime - startTime;
+        System.out.println("RK4 computation time (nSteps=" + nSteps + "): " + durationNanos/1_000 + " mues");
         double yNum = ys[ys.length - 1];
         double yExact = Math.exp(1.0);
 
         double absErr = Math.abs(yNum - yExact);
         assertTrue(absErr < 1e-8, "RK4 solution should closely match e at t=1; error=" + absErr);
     }
+
+  @Test
+  void testExpGrowth_yPrimeEqualsY_withTiming() {
+    // y' = y, y(0) = 1 -> y(t) = e^t
+    ODEFunction f = (t, y) -> y;
+
+    double t0 = 0.0;
+    double y0 = 1.0;
+    double tEnd = 1.0;     // compare at t = 1
+
+    int nSteps = 1_00000;      // sufficiently small h
+    long startTime = System.nanoTime();
+    CalcResult calcResult = RK4.solveWithTiming(f, t0, y0, tEnd, nSteps);
+    long endTime = System.nanoTime();
+    long durationNanos = endTime - startTime;
+    System.out.println("RK4 computation time (nSteps=" + nSteps + "): " + durationNanos/1_000 + " mues");
+
+    double[] ys = calcResult.values();
+    long timeNanos = calcResult.computationNanos();
+    System.out.println("RK4 computation time (nSteps=" + nSteps + "): " + timeNanos/1_000 + " mues");
+    double yNum = ys[ys.length - 1];
+    double yExact = Math.exp(1.0);
+
+    double absErr = Math.abs(yNum - yExact);
+    assertTrue(absErr < 1e-8, "RK4 solution should closely match e at t=1; error=" + absErr);
+  }
+
 
     @Test
     void testGlobalErrorOrderApproximatelyFourth() {

@@ -1,5 +1,7 @@
 package de.m87virgo.math.rk4;
 
+import de.m87virgo.math.CalcResult;
+
 /**
  * Classic 4th-order Runge–Kutta for scalar ODEs.
  */
@@ -40,5 +42,12 @@ public final class RK4 {
             ys[i] = y;
         }
         return ys;
+    }
+
+    public static CalcResult solveWithTiming(ODEFunction f, double t0, double y0, double tEnd, int nSteps) {
+        long startTime = System.nanoTime();
+        double[] ys = solve(f, t0, y0, tEnd, nSteps);
+        long endTime = System.nanoTime();
+        return new CalcResult(ys, endTime - startTime);
     }
 }
